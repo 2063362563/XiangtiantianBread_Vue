@@ -33,27 +33,34 @@
                                 <el-date-picker v-model="form.birth" type="date" placeholder="请选择日期"></el-date-picker>
                             </div>
                         </el-form-item>
-                        <el-form-item label="入职日期" prop="entry_date">
+                        <el-form-item label="入职日期" prop="entryDate">
                             <div class="block">
-                                <el-date-picker v-model="form.birth" type="date" placeholder="请选择日期"></el-date-picker>
+                                <el-date-picker v-model="form.entryDate" type="date"
+                                    placeholder="请选择日期"></el-date-picker>
                             </div>
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="cancel">取 消</el-button>
-                        <el-button type="primary" @click="submit">确 定</el-button>
+                        <el-button type="primary" @click="addEmployee">确 定</el-button>
                     </span>
                 </el-dialog>
+
+                
+
                 <div class="manage-header">
-                    <el-button @click="dialogVisible = true" type="primary">新增</el-button>
+                    <el-button @click="dialogVisible = true" type="primary">新 增</el-button>
                 </div>
             </div>
 
         </div>
+        <div class="query">
+            <el-input class="contant" placeholder="请输入内容" v-model="queryContant">
+            </el-input>
+            <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        </div>
         <div class="employee-table">
-            <el-table
-                :data="tableData.filter(data => !quaryContent || data.name.toLowerCase().includes(quaryContent.toLowerCase()))"
-                style="width: 100%">
+            <el-table v-for="item in tableDataList" :data="item">
                 <el-table-column label="ID" prop="id">
                 </el-table-column>
                 <el-table-column label="姓名" prop="name">
@@ -64,29 +71,22 @@
                 </el-table-column>
                 <el-table-column label="职位" prop="post">
                 </el-table-column>
-                <el-table-column label="月薪" prop="salary">
-                </el-table-column>
                 <el-table-column label="电话号码" prop="tel">
                 </el-table-column>
-                <el-table-column label="出生日期" prop="birth">
-                </el-table-column>
-                <el-table-column label="入职日期" prop="entry_date">
+                <el-table-column label="入职日期" prop="entryDate">
                 </el-table-column>
 
                 <el-table-column style="align:right">
-                    <template slot="header" slot-scope="scope">
-                        <el-input v-model="quaryContent" size="large" placeholder="输入姓名搜索" />
-                    </template>
                     <template slot-scope="scope">
                         <el-button class="edit" size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                            @click="handleEdit(scope.$index, scope.row),DialogVisible = true">Edit</el-button>
                         <el-button class="delete" size="mini" type="danger"
                             @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="1000" class="page" page-size="15" hide-on-single-page="true">
+        <el-pagination background layout="prev, pager, next" :total="1000" class="page">
         </el-pagination>
     </div>
 
@@ -94,142 +94,24 @@
 
 </template>
 <script>
+import axios from 'axios';
 export default {
+    inject:['reload'],
+    created: function () {
+        axios.get("/api/employee/getAllEmployee", {
+            params: {
+                page: 1
+            }
+        }).then((response) => {
+            this.tableDataList = [response.data.data]
+            
+        })
+    },
+    computed: {
+
+    },
     data() {
         return {
-            tableData: [{
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '19806599916',
-                post: '店长',
-                salary: '8000',
-                entry_date: '2016-05-02'
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '19806599916',
-                post: '店长',
-                salary: '8000',
-                entry_date: '2016-05-02'
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '19806599916',
-                post: '店长',
-                salary: '8000',
-                entry_date: '2016-05-02'
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '19806599916',
-                post: '店长',
-                salary: '8000',
-                entry_date: '2016-05-02'
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '19806599916',
-                post: '店长',
-                salary: '8000',
-                entry_date: '2016-05-02'
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            }, {
-                id: 1,
-                birth: '2016-05-02',
-                name: '王小虎',
-                sex: '0',
-                age: '1',
-                tel: '',
-                post: '',
-                salary: '',
-                entry_date: ''
-            },],
-
-            dialogVisible: false,
             form: {
                 name: '',
                 tel: '',
@@ -238,14 +120,15 @@ export default {
                 birth: '',
                 salary: '',
                 post: '',
-                entry_date: '',
+                entryDate: '',
             },
-            quaryContent: '',
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
-            },
+           
+            queryContant: '',
+
+            tableDataList: [],
+
+            dialogVisible: false,
+
             rules: {
                 name: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -258,13 +141,13 @@ export default {
                 birth: [
                     { type: 'date', required: true, message: '请选择出生日期', trigger: 'change' }
                 ],
-                sex: [
-                    { required: true, message: '请选择性别', trigger: 'change' }
-                ],
-                entry_date: [
+                entryDate: [
                     { type: 'date', required: true, message: '请选择入职日期', trigger: 'change' }
                 ],
                 sex: [
+                    { required: true, message: '请选择性别', trigger: 'change' }
+                ],
+                post: [
                     { required: true, message: '请选择职位', trigger: 'change' }
                 ],
                 salary: [
@@ -278,18 +161,70 @@ export default {
         };
     },
     methods: {
+
+        deleteEmployee(){
+            axios.delete()
+        },
         handleEdit(index, row) {
             console.log(index, row);
+            console.log(row.id)
+
+            //校验表单
+            this.$refs.form.validate((valid) => {
+                //是否校验成功
+                if (valid) {
+                    console.log('Edit!');
+
+                    //成功后发送PUT请求修改员工
+                    
+
+                    //表单重置
+                    this.$refs.form.resetFields()
+                    //弹窗消失
+                    this.dialogVisible = false
+                }
+            })
+            
         },
         handleDelete(index, row) {
-            console.log(index, row);
+            console.log(index, row.id);
+            axios.delete("/api/employee/deleteEmployee/"+row.id).then((response) => {
+                console.log(response);
+                this.reload()
+            })
         },
-        submit() {
+        addEmployee() {
+            console.log(this.form)
+
+            //校验表单
             this.$refs.form.validate((valid) => {
+                //是否校验成功
+                if (valid) {
+                    console.log('submit!');
 
-                this.$refs.form.resetFields()
-                this.dialogVisible = false
+                    //成功后发送post请求添加员工
+                    axios.post("/api/employee/saveEmployee", {
 
+                        name: this.form.name,
+                        tel: this.form.tel,
+                        age: this.form.age,
+                        post: this.form.post,
+                        salary: this.form.salary,
+                        sex: this.form.sex,
+                        birth: this.form.birth,
+                        entryDate: this.form.entryDate
+
+
+                    }).then((response) => {
+                        console.log("成功发送了post请求")
+                        console.log("返回结果" + response)
+                    })
+
+                    //表单重置
+                    this.$refs.form.resetFields()
+                    //弹窗消失
+                    this.dialogVisible = false
+                }
             })
         },
         //弹框关闭前使用的方法
@@ -307,18 +242,22 @@ export default {
 </script>
 
 <style lang="less">
-.top {
+.employee-table {
+    width: 100%;
+    height: 720px;
+}
+
+.query {
     display: flex;
-    justify-content: space-between;
+    padding: 20px;
+    margin-right: 45px;
+    float: right;
+    width: 20%;
 
-
-}
-.employee-table{
-    height: 820px;
-}
-
-.page{
-    
+    .contant {
+        padding-right: 20px;
+    }
 }
 
+.page {}
 </style>

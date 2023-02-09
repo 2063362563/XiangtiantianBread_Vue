@@ -23,7 +23,7 @@
                         <span class="little-title">今日销售统计</span>
                     </div>
                     <div>
-                        <el-table :data="tableData" style="width: 100%">
+                        <el-table :data="tableData" style="width: 100%;height: 460px;">
                             <el-table-column prop="goods" label="商品" width="160">
                             </el-table-column>
                             <el-table-column prop="number" label="数量">
@@ -38,12 +38,12 @@
         <el-col :span="16">
             <div class="grid-content-bg-purple-light">
 
-                <el-card class="box-card">
+                <el-card class="box-card" style="height: 470px;">
                     <div slot="header" class="clearfix">
                         <span class="little-title">已售商品</span>
                     </div>
                     <div>
-                        <el-table :data="order" stripe style="width: 100%">
+                        <el-table :data="order" stripe style="width: 100% ;height: 320px;" >
                             <el-table-column prop="time" label="时间" width="160">
                             </el-table-column>
                             <el-table-column prop="username" label="用户" width="160">
@@ -73,9 +73,7 @@
 
 <script >
 
-// import { getData } from '@/api';
 import * as echarts from 'echarts';
-
 export default {
     data() {
         return {
@@ -91,18 +89,6 @@ export default {
             }, {
                 goods: '提拉米苏',
                 number: 37
-            },{
-                goods: '提拉米苏',
-                number: 37
-            },{
-                goods: '提拉米苏',
-                number: 37
-            },{
-                goods: '提拉米苏',
-                number: 37
-            }, {
-                goods: '榴莲千层',
-                number: 39
             },],
             order: [{
                 time: '2016-05-02',
@@ -111,43 +97,11 @@ export default {
                 number: 1,
                 price: 10,
                 total: 10,
-            }, {
-                time: '2016-05-02',
-                username: '王小虎',
-                goods: '巧克力甜甜圈',
-                number: 1,
-                price: 10,
-                total: 10,
-            },{
-                time: '2016-05-02',
-                username: '王小虎',
-                goods: '巧克力甜甜圈',
-                number: 1,
-                price: 10,
-                total: 10,
-            }, {
-                time: '2016-05-02',
-                username: '王小虎',
-                goods: '巧克力甜甜圈',
-                number: 1,
-                price: 10,
-                total: 10,
-            }, {
-                time: '2016-05-02',
-                username: '王小虎',
-                goods: '巧克力甜甜圈',
-                number: 1,
-                price: 10,
-                total: 10,
-            }, {
-                time: '2016-05-02',
-                username: '王小虎',
-                goods: '巧克力甜甜圈',
-                number: 1,
-                price: 10,
-                total: 10,
             },]
         }
+    },
+    created:function(){
+        
     },
     mounted() {
         var myChart = echarts.init(document.getElementById('line-chart'));
