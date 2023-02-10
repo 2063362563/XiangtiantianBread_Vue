@@ -1,60 +1,33 @@
 <template>
-    <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="活动名称">
-            <el-input v-model="form.name"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-            <el-button>取消</el-button>
-        </el-form-item>
-    </el-form>
+    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
+        :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed"
+        :file-list="fileList">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    </el-upload>
 </template>
+
 <script>
-import axios from 'axios'
+import axios from 'axios';
 export default {
     data() {
         return {
-            form: {
-                name: '',
-
-            }
-        }
+            fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+        };
     },
     methods: {
-        onSubmit() {
-            // console.log(this.form)
-            // axios.post(this.HOST + "/employee/addEmployee", {
-            //     name: this.form.name
-            // }).then((response) => {
-            //     console.log("返回结果" + response)
-            // })
-
-            // axios.post("/api/cotton/",
-            //     {
-            //         user_id: window.location['pathname'].replace('/', ''),
-            //         cotton: this.cotton_text.replace(/<[^>]*>/g, ''),
-            //         content: this.captcha,
-            //         captcha: md5(this.img_src),
-            //     }).then((res) => {
-            //         if (res.data.code === 400) {
-            //             this.wrong_captcha = true;
-            //             this.captcha = "";
-            //             this.captcha_src();
-            //         } else {
-            //             this.success_post = true;
-            //             this.wrong_captcha = false;
-            //             this.cotton_text = "";
-            //             this.captcha = "";
-            //             this.captcha_src();
-            //         }
-            //     }).catch(() => {
-            //         this.$router.push("/")
-            //     });
-
-
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handleExceed(files, fileList) {
+            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${file.name}？`);
         }
     }
 }
 </script>
-
