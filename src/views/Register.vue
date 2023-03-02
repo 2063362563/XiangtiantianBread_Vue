@@ -1,67 +1,54 @@
 <template>
-    <div class="loginbody">
-        <div class="logindata">
-            <div class="logintext">
-                <h2>登录</h2>
+    <div class="registerbody">
+        <div class="registerdata">
+            <div class="registertext">
+                <h2>注册</h2>
             </div>
             <div class="formdata">
                 <el-form ref="form" :model="form">
                     <el-form-item prop="username">
-                        <el-input v-model="form.username" placeholder="请输入账号"></el-input>
+                        <el-input v-model="form.username" clearable placeholder="请输入账号"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input v-model="form.password" placeholder="请输入密码" show-password></el-input>
+                        <el-input v-model="form.password" clearable placeholder="请输入密码" show-password></el-input>
+                    </el-form-item>
+                    <el-form-item prop="passwordCheck">
+                        <el-input v-model="form.passwordCheck" clearable placeholder="请重复密码" show-password></el-input>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="button">
-                <el-button type="primary" @click="login">登录</el-button>
-                <el-button class="register" @click="register">注册</el-button>
+                <el-button class="register" @click="register" type="primary">注册</el-button>
+                <el-button @click="goBack">返回</el-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
-import axios from 'axios';
-
 export default {
     data() {
         return {
             form: {
-                password: "",
                 username: "",
+                password: "",
+                passwordCheck: "",
             },
         };
     },
-    created:
-        function () {
-            console.log(this.$store.state.userinfo);
-            this.$store.commit("logout")
-            console.log(this.$store.state.userinfo);
-        },
     methods: {
-        login() {
-            axios.post('/api/employee/login', {
-                username: this.form.username,
-                password: this.form.password,
-            }).then((response) => {
-                if (response.data.code === 200) {
-                    this.$store.commit("login", response.data.data)
-                    this.$router.push('/')
-                }
-            })
-        },
         register() {
-            this.$router.push('register');
+            
+        },
+        goBack() {
+            this.$router.push('/login');
         },
     },
 };
 </script>
 
 <style scoped>
-.loginbody {
+.registerbody {
     width: 100%;
     height: 100%;
     min-width: 1000px;
@@ -75,7 +62,7 @@ export default {
     padding-top: 150px;
 }
 
-.logintext {
+.registertext {
     margin-bottom: 20px;
     line-height: 50px;
     text-align: center;
@@ -85,7 +72,7 @@ export default {
     text-shadow: 2px 2px 4px #857d7d;
 }
 
-.logindata {
+.registerdata {
     width: 400px;
     height: 300px;
     transform: translate(-50%);
@@ -101,5 +88,6 @@ export default {
 
 .register {
     cursor: pointer;
+
 }
 </style>

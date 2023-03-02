@@ -1,33 +1,48 @@
 <template>
-    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
-        :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed"
-        :file-list="fileList">
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
+    <div class="body" style="margin-top: 0;">
+        
+        <div class="query">
+            <el-input class="contant" placeholder="请输入商品名称或者ID" v-model="queryContent">
+            </el-input>
+            <el-button type="primary" icon="el-icon-search" @click="query">搜索</el-button>
+        </div>
+
+        <el-card class="box-card" style="width: 70%; margin-left: 13%;">
+            <div style="display: inline-block;">
+                <img src="../assets/2094954683.jpeg" class="image" style="height: 158px;width: 150px;">
+            </div>
+
+            <div style="display: inline-block;">
+                <el-card style="margin-left: 20px;width:680px">
+                    <ul style="display: inline-block;">
+                        <li>名称</li>
+                        <li>单价</li>
+                        <li>种类</li>
+                        <li>描述</li>
+                    </ul>
+                    <div style="display: inline-block;margin-left: 20px;">
+                        <p>提拉米苏</p>
+                        <p>12.8</p>
+                        <p>蛋糕</p>
+                        <p>这个提拉米苏非常好吃!</p>
+                    </div>
+                </el-card>
+            </div>
+        </el-card>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
 export default {
     data() {
         return {
-            fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+            currentDate: new Date()
         };
-    },
-    methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${file.name}？`);
-        }
     }
 }
 </script>
+
+<style lang="less">
+
+</style>
+

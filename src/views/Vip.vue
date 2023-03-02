@@ -15,6 +15,9 @@
                                 <el-date-picker v-model="form.birth" type="date" placeholder="请选择日期"></el-date-picker>
                             </div>
                         </el-form-item>
+                        <el-form-item label="当前积分" prop="nowIntegral">
+                            <el-input placeholder="请输入积分" v-model="form.nowIntegral"></el-input>
+                        </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="cancel">取 消</el-button>
@@ -37,6 +40,8 @@
                 <el-table-column label="电话号码" prop="tel">
                 </el-table-column>
                 <el-table-column label="会员等级" prop="vip" :formatter="levelFormatter">
+                </el-table-column>
+                <el-table-column label="当前积分" prop="nowIntegral">
                 </el-table-column>
                 <el-table-column style="align:right">
                     <template slot-scope="scope">
@@ -79,6 +84,7 @@ export default {
                 vip: '',
                 tel: '',
                 birth: '',
+                nowIntegral: '',
             },
 
             queryContent: "",
@@ -181,6 +187,7 @@ export default {
             this.form.birth = row.birth
             this.form.tel = row.tel
             this.form.vip = row.vip
+            this.form.nowIntegral = row.nowIntegral
             this.editDialogVisible = true
 
         },
@@ -192,6 +199,7 @@ export default {
                 tel: this.form.tel,
                 vip: this.form.vip,
                 birth: this.form.birth,
+                nowIntegral: this.form.nowIntegral,
             })
             //表单重置
             this.$refs.form.resetFields()

@@ -4,10 +4,10 @@
             <div class="grid-content-bg-purple">
                 <el-card class="box-card">
                     <div class="user">
-                        <img src="../assets/image/usericon/2147538700.jpeg">
+                        <img src="../assets/2094954683.jpeg">
                         <div class="userinfo">
-                            <p class="name">username</p>
-                            <p class="identity">identity</p>
+                            <p class="name">{{ this.$store.state.userinfo.name }}</p>
+                            <p class="identity">{{this.$store.state.userinfo.post | postFilter}}</p>
                         </div>
                     </div>
                     <div class="login-info">
@@ -16,7 +16,6 @@
                             <p>上次登录时间:<span> 具体时间 </span></p>
                         </div>
                     </div>
-
                 </el-card>
                 <el-card class="box-card" style="height:600px">
                     <div slot="header" class="clearfix">
@@ -43,7 +42,7 @@
                         <span class="little-title">已售商品</span>
                     </div>
                     <div>
-                        <el-table :data="order" stripe style="width: 100% ;height: 320px;" >
+                        <el-table :data="order" stripe style="width: 100% ;height: 320px;">
                             <el-table-column prop="time" label="时间" width="160">
                             </el-table-column>
                             <el-table-column prop="username" label="用户" width="160">
@@ -73,10 +72,12 @@
 
 <script >
 
+import axios from 'axios';
 import * as echarts from 'echarts';
 export default {
     data() {
         return {
+
             tableData: [{
                 goods: '巧克力甜甜圈',
                 number: 34
@@ -100,8 +101,17 @@ export default {
             },]
         }
     },
-    created:function(){
+    filters: {
+        postFilter: function (value) {
+            if (value = 1) return '店长'
+            if (value = 2) return '店员'
+        }
+    },
+    created: function () {
         
+    },
+    methods: {
+
     },
     mounted() {
         var myChart = echarts.init(document.getElementById('line-chart'));
@@ -112,14 +122,14 @@ export default {
             },
             xAxis: {
                 type: 'category',
-                data: ['', '', '','','','','今日']
+                data: ['', '', '', '', '', '', '今日']
             },
             yAxis: {
                 type: 'value'
             },
             series: [
                 {
-                    data: [10, 200, 150,120, 200, 150,120],
+                    data: [10, 200, 150, 120, 200, 150, 120],
                     type: 'line'
                 }
             ]

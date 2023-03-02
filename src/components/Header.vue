@@ -10,19 +10,20 @@
             </el-breadcrumb>
         </div>
         <div class="right-content">
-            <el-dropdown>
+            <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
-                    User<i class="el-icon-arrow-down el-icon--right"></i>
+                    user<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人中心</el-dropdown-item>
-                    <el-dropdown-item>登出</el-dropdown-item>
+                    <el-dropdown-item command="/my">个人信息</el-dropdown-item>
+                    <el-dropdown-item command="/login">登出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
     </div>
 </template>
 <script>
+import axios from 'axios';
 import { mapState } from 'vuex';
 export default {
     data() {
@@ -31,18 +32,30 @@ export default {
         }
     },
     methods: {
+        logout() {
+            this.$router.push("/login")
+        },
         handleMenu() {
             this.$store.commit('collapseMenu')
 
+        },
+        handleCommand(command) {
+            console.log(this.$store.state.userinfo);
+            if (command == "/login") {
+                axios.post('/api/employee/logout')
+                this.$store.commit('logout')
+            }
+            this.$router.push(command)
+            console.log(this.$store.state.userinfo);
         }
     },
     computed: {
         ...mapState({
-            tags: state => state.tab.tabsList
+            tags: state => state.tabsList
         })
     },
     mounted() {
-        
+
     }
 }
 </script>
@@ -69,11 +82,12 @@ export default {
             padding-left: 20px;
 
             ::v-deep .el-breadcrumb__item {
-                 .el-breadcrumb__inner {
+                .el-breadcrumb__inner {
                     color: #fff;
                 }
+
                 &:last-child {
-                    .el-breadcrumb__inner{
+                    .el-breadcrumb__inner {
                         color: rgb(177, 230, 243);
                     }
                 }

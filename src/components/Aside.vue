@@ -138,7 +138,7 @@ export default {
             return this.menuDate.filter(item => item.children)
         },
         isCollapse(){
-          return this.$store.state.tab.isCollapse
+          return this.$store.state.isCollapse
         }
     }
 }

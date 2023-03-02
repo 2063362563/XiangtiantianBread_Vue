@@ -8,25 +8,46 @@ import New from "../views/New.vue"
 import Discount from "../views/Discount.vue"
 import Cake from "../views/Cake.vue"
 import Bread from "../views/Bread.vue"
+import Login from "../views/Login.vue"
+import My from "../views/My.vue"
+import Register from "../views/Register.vue"
+
 Vue.use(VueRouter)
 
 const routes = [
-  //主路由
+  //登录
+  {
+    path: '/login',
+    component: Login,
+  },
+  //注册
+  {
+    path: '/register',
+    component: Register,
+  },
+  //个人中心
+  {
+    path: '/my',
+    component: My,
+  },
+  //后台主路由
   {
     path: '/',
     component: Main,
     redirect: '/home',
     //子路由
     children: [
-      { path: 'home', name:'home', component: Home },
-      { path: 'vip', name:'vip', component: Vip },
-      { path: 'employee', name:'employee', component: Employee },
-      { path: 'new', name:'new', component: New },
-      { path: 'discount', name:'discount', component: Discount },
-      { path: 'cake', name:'cake', component: Cake },
-      { path: 'bread', name:'bread', component: Bread },
-    ]
-  }
+      { path: '/home', name:'home', component: Home },
+      { path: '/vip', name:'vip', component: Vip },
+      { path: '/employee', name:'employee', component: Employee },
+      { path: '/new', name:'new', component: New },
+      { path: '/discount', name:'discount', component: Discount },
+      { path: '/cake', name:'cake', component: Cake },
+      { path: '/bread', name:'bread', component: Bread },
+      { path: '/my', name:'my', component: My },
+    ],
+  },
+  
   
 
 ]

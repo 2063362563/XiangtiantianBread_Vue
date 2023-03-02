@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <router-link to="/login">login</router-link>
+    <router-link to="/">home</router-link>
     <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
