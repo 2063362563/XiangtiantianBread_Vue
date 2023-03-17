@@ -32,7 +32,7 @@
             <el-button type="primary" icon="el-icon-search" @click="query">搜索</el-button>
         </div>
         <div class="consumer-table">
-            <el-table v-for="item in tableDataList" :data="item">
+            <el-table v-for="item in tableDataList" :key="item.label" :data="item">
                 <el-table-column label="ID" prop="id">
                 </el-table-column>
                 <el-table-column label="昵称" prop="name">
@@ -58,9 +58,6 @@
         </el-pagination>
 
     </div>
-
-
-
 </template>
 <script>
 import axios from 'axios';
@@ -108,17 +105,17 @@ export default {
         })
     },
     methods: {
-        levelFormatter(row,column){
-            if(row.vip == 0){
+        levelFormatter(row) {
+            if (row.vip == 0) {
                 return "无会员"
             }
-            if(row.vip == 1){
+            if (row.vip == 1) {
                 return "白银会员"
             }
-            if(row.vip == 2){
+            if (row.vip == 2) {
                 return "黄金会员"
             }
-            if(row.vip == 3){
+            if (row.vip == 3) {
                 return "钻石会员"
             }
         },
@@ -175,9 +172,15 @@ export default {
                         page: this.currentPage
                     }
                 }).then((response) => {
-                    this.querying = true
-                    this.tableDataList = [response.data.data.limitList]
-                    this.total = response.data.data.total
+                    console.log(response.data.data);
+                    if (response.data.data != null) {
+                        this.querying = true
+                        this.tableDataList = [response.data.data.limitList]
+                        this.total = response.data.data.total
+                    }
+                    // if(){
+
+                    // }
                 })
         },
 
@@ -213,7 +216,7 @@ export default {
             axios.delete("/api/consumer/deleteConsumer/" + row.id)
             this.reload()
         },
-        
+
         //弹框关闭前使用的方法
         handleClose() {
             this.$refs.form.resetFields()

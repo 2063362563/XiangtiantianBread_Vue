@@ -1,14 +1,14 @@
 import Vue from "vue"
 import Vuex from 'vuex'
 
+
 Vue.use(Vuex)
 
 //创建vuex的实例
 const store = new Vuex.Store({
     state: {
-        userinfo:{
-            
-        },
+        count: 0,
+        userinfo: {},
         isCollapse: false, //控制左侧菜单展开与收起
         tabsList: [
             {
@@ -21,11 +21,15 @@ const store = new Vuex.Store({
         ]
     },
     mutations: {
-        login(state,data){
+        login(state, data) {
             state.userinfo = data
         },
-        logout(state){
+        logout(state) {
             state.userinfo = {}
+            localStorage.clear
+        },
+        add(state) {
+            state.count++
         },
         //修改菜单展开收起的方法
         collapseMenu(state) {
@@ -48,5 +52,15 @@ const store = new Vuex.Store({
             state.tabsList.splice(index, 1)
         }
     }
+
+})
+// 在页面加载时，从localStorage中读取数据
+if (localStorage.getItem('store')) {
+    store.replaceState(Object.assign({}, store.state, JSON.parse(localStorage.getItem('store'))))
+}
+
+// 在每次mutation后，将state存储到localStorage中
+store.subscribe((mutation, state) => {
+    localStorage.setItem('store', JSON.stringify(state))
 })
 export default store

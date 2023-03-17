@@ -3,7 +3,7 @@
         <div class="top">
             <div class="add-employee">
                 <el-dialog title="员工信息" :visible.sync="addDialogVisible" width="40%" :before-close="handleClose">
-                    <el-form inline ref="form" :model="form" label-width="80px">
+                    <el-form inline ref="form" :model="form" label-width="80px" :rules="rules">
                         <el-form-item label="姓名" prop="name">
                             <el-input placeholder="请输入姓名" v-model="form.name"></el-input>
                         </el-form-item>
@@ -15,8 +15,8 @@
                         </el-form-item>
                         <el-form-item label="职位" prop="post">
                             <el-select v-model="form.post" placeholder="请选择职位">
-                                <el-option label="店长" value="0"></el-option>
-                                <el-option label="店员" value="1"></el-option>
+                                <el-option label="店长" value="1"></el-option>
+                                <el-option label="店员" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="薪资" prop="salary">
@@ -35,8 +35,7 @@
                         </el-form-item>
                         <el-form-item label="入职日期" prop="entryDate">
                             <div class="block">
-                                <el-date-picker v-model="form.entryDate" type="date"
-                                    placeholder="请选择日期"></el-date-picker>
+                                <el-date-picker v-model="form.entryDate" type="date" placeholder="请选择日期"></el-date-picker>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -47,7 +46,7 @@
                 </el-dialog>
 
                 <el-dialog title="员工信息" :visible.sync="editDialogVisible" width="40%" :before-close="handleClose">
-                    <el-form inline ref="form" :model="form" label-width="80px">
+                    <el-form inline ref="form" :model="form" label-width="80px" :rules="rules">
                         <el-form-item label="姓名" prop="name">
                             <el-input placeholder="请输入姓名" v-model="form.name"></el-input>
                         </el-form-item>
@@ -59,8 +58,8 @@
                         </el-form-item>
                         <el-form-item label="职位" prop="post">
                             <el-select v-model="form.post" placeholder="请选择职位">
-                                <el-option label="店长" value="0"></el-option>
-                                <el-option label="店员" value="1"></el-option>
+                                <el-option label="店长" value="1"></el-option>
+                                <el-option label="店员" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="薪资" prop="salary">
@@ -79,8 +78,7 @@
                         </el-form-item>
                         <el-form-item label="入职日期" prop="entryDate">
                             <div class="block">
-                                <el-date-picker v-model="form.entryDate" type="date"
-                                    placeholder="请选择日期"></el-date-picker>
+                                <el-date-picker v-model="form.entryDate" type="date" placeholder="请选择日期"></el-date-picker>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -102,7 +100,7 @@
             <el-button type="primary" icon="el-icon-search" @click="query">搜索</el-button>
         </div>
         <div class="employee-table">
-            <el-table v-for="item in tableDataList" :data="item">
+            <el-table v-for="item in tableDataList" :key="item.label" :data="item" :rule="rules">
                 <el-table-column label="ID" prop="id">
                 </el-table-column>
                 <el-table-column label="姓名" prop="name">
@@ -129,13 +127,10 @@
         </div>
 
         <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage"
-            layout="total, prev, pager, next" :total="total">>
+            layout="total, prev, pager, next" :total="total">
         </el-pagination>
 
     </div>
-
-
-
 </template>
 <script>
 import axios from 'axios';
@@ -148,7 +143,7 @@ export default {
     data() {
         return {
 
-            
+
 
             currentPage: 1,
 
@@ -175,7 +170,29 @@ export default {
             addDialogVisible: false,
 
             editDialogVisible: false,
-
+            rules: {
+                name: [
+                    { required: true, message: '请输入姓名', trigger: 'blur' },
+                    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+                ],
+                sex: [
+                    { required: true, message: '请选择性别', trigger: 'change' }
+                ],
+                age: [
+                    { required: true, message: '请输入年龄', trigger: 'change' },
+                    { pattern: /^(1[6-9]|[2-9]\d|1[01]\d|120)$/, message: '年龄必须在16-120之间' }
+                ],
+                post: [
+                    { required: true, message: '请选择职位', trigger: 'change' }
+                ],
+                tel: [
+                    { required: true, message: '请输入电话号码', trigger: 'blur' },
+                    { pattern: /^1[3456789]\d{9}$/, message: '电话号码格式不正确' }
+                ],
+                entryDate: [
+                    { required: true, message: '请选择入职日期', trigger: 'change' }
+                ]
+            }
         };
     },
     created: function () {
@@ -191,26 +208,24 @@ export default {
         })
     },
     methods: {
-        sexFormatter(row,column){
-            if(row.sex == 0){
+        sexFormatter(row) {
+            if (row.sex == 0) {
                 return "男"
             }
-            if(row.sex == 1){
+            if (row.sex == 1) {
                 return "女"
             }
         },
-        postFormatter(row,column){
-            if(row.post == 1){
+        postFormatter(row) {
+            if (row.post == 1) {
                 return "店长"
             }
-            if(row.post == 2){
+            if (row.post == 2) {
                 return "店员"
             }
-           
         },
         handleCurrentChange() {
-
-            //有一个小bug,如果当前页面大于请求后得到的页数会报错,因为this.currentPage超出上限
+            //有一个小bug,如果当前页面大于请求后得到的页数会报错,因为this.currentPage超出上限,2不能搜索,有bug
             if (this.querying) {
                 this.reload()
                 axios.get("/api/employee/getEmployeeByNameOrId",
@@ -223,7 +238,6 @@ export default {
                         this.querying = true
                         this.tableDataList = [response.data.data.limitList]
                         this.total = response.data.data.total
-
                     })
             } else {
                 axios.get("/api/employee/getAllEmployee", {
@@ -234,7 +248,6 @@ export default {
                     this.tableDataList = [response.data.data]
                 })
             }
-
         },
         open(row) {
             this.$confirm('此操作将永久删除该员工, 是否继续?', '提示', {
@@ -276,10 +289,9 @@ export default {
             this.form.entryDate = row.birth
             this.form.salary = row.salary
             this.form.tel = row.tel
-            if (row.sex = 1) { this.form.sex = "女" } else { this.form.sex = "男" }
-            if (row.post = 1) { this.form.post = "店长" } else { this.form.post = "店员" }
+            this.form.sex = "" + row.sex
+            this.form.post = "" + row.post
             this.editDialogVisible = true
-
         },
 
         editEmployee() {
@@ -289,8 +301,8 @@ export default {
                 tel: this.form.tel,
                 age: this.form.age,
                 salary: this.form.salary,
-                post: this.form.post === "店长" ? 1 : 2,
-                sex: this.form.sex === "女" ? 0 : 1,
+                post: this.form.post,
+                sex: this.form.sex,
                 birth: this.form.birth,
                 entryDate: this.form.entryDate
             })
@@ -307,29 +319,25 @@ export default {
             this.reload()
         },
         addEmployee() {
-          
 
-            //发送post请求添加员工
-            axios.post("/api/employee/saveEmployee", {
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    // 验证通过，发送axios请求
+                    axios.post('/api/employee/saveEmployee', this.form).then((response) => {
+                        console.log(response.data.data)
+                    })
 
-                name: this.form.name,
-                tel: this.form.tel,
-                age: this.form.age,
-                post: this.form.post,
-                salary: this.form.salary,
-                sex: this.form.sex,
-                birth: this.form.birth,
-                entryDate: this.form.entryDate
-
-
-            })
-
-            //表单重置
-            this.$refs.form.resetFields()
-            //弹窗消失
-            this.addDialogVisible = false
-            this.reload()
-
+                } else {
+                    // 验证失败，显示错误消息
+                    console.log('error submit!!');
+                    return false;
+                }
+                //表单重置
+                this.$refs.form.resetFields()
+                //弹窗消失
+                this.addDialogVisible = false
+                this.reload()
+            });
         },
         //弹框关闭前使用的方法
         handleClose() {

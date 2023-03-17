@@ -16,7 +16,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="/my">个人信息</el-dropdown-item>
-                    <el-dropdown-item command="/login">登出</el-dropdown-item>
+                    <el-dropdown-item command="/logout">登出</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -33,20 +33,35 @@ export default {
     },
     methods: {
         logout() {
-            this.$router.push("/login")
+
+            //发请求至后端，记录登出时间
+            axios.post('/api/employee/logout/' + this.$store.state.userinfo.id).then(() => {
+                //清空store里的登录信息
+                this.$store.commit("logout")
+                //弹提示消息
+                this.$message({
+                    message: '已退出登录！',
+                    type: 'success'
+                });
+                //跳转至登录页面
+                this.$router.push("/login")
+                console.log(this.$store.state.userinfo);
+            })
         },
         handleMenu() {
             this.$store.commit('collapseMenu')
-
         },
         handleCommand(command) {
-            console.log(this.$store.state.userinfo);
-            if (command == "/login") {
-                axios.post('/api/employee/logout')
-                this.$store.commit('logout')
+            //判断下拉选项的内容是什么
+            if (command == "/logout") {
+                //退出登录方法
+                this.logout()
+            } else {
+                //如果command不是login，就是my，暂时没有更多选项，直接去个人中心页
+                if (this.$route.path != command)
+                    this.$router.push(command)
+
             }
-            this.$router.push(command)
-            console.log(this.$store.state.userinfo);
         }
     },
     computed: {

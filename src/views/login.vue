@@ -23,9 +23,7 @@
 </template>
 
 <script>
-
 import axios from 'axios';
-
 export default {
     data() {
         return {
@@ -36,20 +34,18 @@ export default {
         };
     },
     created:
-        function () {
-            console.log(this.$store.state.userinfo);
-            this.$store.commit("logout")
-            console.log(this.$store.state.userinfo);
-        },
+        function () { },
     methods: {
         login() {
             axios.post('/api/employee/login', {
                 username: this.form.username,
                 password: this.form.password,
             }).then((response) => {
-                if (response.data.code === 200) {
+                if (response.data.code == 200) {
                     this.$store.commit("login", response.data.data)
-                    this.$router.push('/')
+                    this.$router.push('/home')
+                } else {
+                    this.$message.error(response.data.message);
                 }
             })
         },

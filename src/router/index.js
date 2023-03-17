@@ -25,30 +25,25 @@ const routes = [
     path: '/register',
     component: Register,
   },
-  //个人中心
-  {
-    path: '/my',
-    component: My,
-  },
   //后台主路由
   {
     path: '/',
     component: Main,
-    redirect: '/home',
+    redirect: '/login',
     //子路由
     children: [
-      { path: '/home', name:'home', component: Home },
-      { path: '/vip', name:'vip', component: Vip },
-      { path: '/employee', name:'employee', component: Employee },
-      { path: '/new', name:'new', component: New },
-      { path: '/discount', name:'discount', component: Discount },
-      { path: '/cake', name:'cake', component: Cake },
-      { path: '/bread', name:'bread', component: Bread },
-      { path: '/my', name:'my', component: My },
+      { path: '/home', name: 'home', component: Home },
+      { path: '/vip', name: 'vip', component: Vip },
+      { path: '/employee', name: 'employee', component: Employee },
+      { path: '/new', name: 'new', component: New },
+      { path: '/discount', name: 'discount', component: Discount },
+      { path: '/cake', name: 'cake', component: Cake },
+      { path: '/bread', name: 'bread', component: Bread },
+      //个人中心
+      { path: '/my', name: 'my', component: My, },
     ],
   },
-  
-  
+
 
 ]
 
