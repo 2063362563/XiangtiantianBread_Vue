@@ -7,9 +7,10 @@ Vue.use(Vuex)
 //创建vuex的实例
 const store = new Vuex.Store({
     state: {
-        count: 0,
+        //记录登录信息
         userinfo: {},
         isCollapse: false, //控制左侧菜单展开与收起
+        //面包屑的列表
         tabsList: [
             {
                 path: '/',
@@ -18,18 +19,41 @@ const store = new Vuex.Store({
                 icon: 'el-icon-s-home',
                 url: 'Home/Home',
             },
-        ]
+        ],
+        //顾客的购物车信息
+        cart: [],
+    },
+    getters: {
+        totalPrice: state => {
+            return state.cart.reduce((total, item) => total + item.price * item.num, 0);
+        }
     },
     mutations: {
+        addCart(state, { goodId, goodName, price, num }) {
+            let item = state.cart.find((item) =>
+                item.goodId === goodId
+            );
+            if (item) {
+                item.num += num;
+            } else {
+                state.cart.push({ goodId: goodId, goodName: goodName, price: price, num: num });
+            }
+        },
+        deleteCart(state, goodName) {
+            let itemIndex = state.cart.findIndex((item) => item.goodName === goodName);
+            if (itemIndex !== -1) {
+                state.cart.splice(itemIndex, 1);
+            }
+        },
+        cleanCart(state) {
+            state.cart = []
+        },
         login(state, data) {
             state.userinfo = data
         },
         logout(state) {
             state.userinfo = {}
             localStorage.clear
-        },
-        add(state) {
-            state.count++
         },
         //修改菜单展开收起的方法
         collapseMenu(state) {
