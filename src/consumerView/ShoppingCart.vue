@@ -136,10 +136,13 @@ export default {
           headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
-          this.$message({
-            message: "您一共消费" + response.data.data + "元,欢迎下次光临!",
-            type: "success",
-          });
+          this.$alert(
+            "您一共消费" + response.data.data + "元,欢迎下次光临!",
+            "购买成功",
+            {
+              confirmButtonText: "确定",
+            }
+          );
           this.$store.commit("cleanCart");
           this.$router.push("buy");
         });

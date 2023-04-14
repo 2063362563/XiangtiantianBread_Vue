@@ -8,7 +8,6 @@ import Cake from "../views/Cake.vue"
 import Bread from "../views/Bread.vue"
 import Login from "../views/Login.vue"
 import My from "../views/My.vue"
-import Setting from "../views/Setting.vue"
 import Buy from "../consumerView/Buy.vue"
 import ShoppingCart from "../consumerView/ShoppingCart.vue"
 
@@ -40,7 +39,6 @@ const routes = [
       { path: '/employee', name: 'employee', component: Employee },
       { path: '/cake', name: 'cake', component: Cake },
       { path: '/bread', name: 'bread', component: Bread },
-      { path: '/setting', name: 'setting', component: Setting },
       //个人中心
       { path: '/my', name: 'my', component: My, },
     ],

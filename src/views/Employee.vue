@@ -133,9 +133,7 @@
         </el-dialog>
 
         <div class="manage-header">
-          <el-button @click="addDialogVisible = true" type="primary"
-            >新 增</el-button
-          >
+          <el-button @click="openAddEmployee" type="primary">新 增</el-button>
         </div>
       </div>
     </div>
@@ -267,6 +265,10 @@ export default {
       });
   },
   methods: {
+    openAddEmployee() {
+      this.form = {};
+      this.addDialogVisible = true;
+    },
     sexFormatter(row) {
       if (row.sex == 0) {
         return "男";
@@ -295,9 +297,16 @@ export default {
             },
           })
           .then((response) => {
-            this.querying = true;
-            this.tableDataList = [response.data.data.limitList];
-            this.total = response.data.data.total;
+            if (response.data.data === null) {
+              this.$message({
+                type: "info",
+                message: "查无此人",
+              });
+            } else {
+              this.querying = true;
+              this.tableDataList = [response.data.data.limitList];
+              this.total = response.data.data.total;
+            }
           });
       } else {
         axios
@@ -340,9 +349,16 @@ export default {
           },
         })
         .then((response) => {
-          this.querying = true;
-          this.tableDataList = [response.data.data.limitList];
-          this.total = response.data.data.total;
+          if (response.data.data === null) {
+            this.$message({
+              type: "info",
+              message: "查无此人",
+            });
+          } else {
+            this.querying = true;
+            this.tableDataList = [response.data.data.limitList];
+            this.total = response.data.data.total;
+          }
         });
     },
 

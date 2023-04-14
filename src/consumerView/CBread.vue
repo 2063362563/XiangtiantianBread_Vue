@@ -21,7 +21,7 @@
             <el-card style="margin-left: 20px; width: 680px">
               <el-descriptions
                 class="margin-top"
-                :column="5"
+                :column="6"
                 size="small"
                 border
               >
@@ -46,6 +46,10 @@
                   {{ good.type }}
                 </el-descriptions-item>
                 <el-descriptions-item>
+                  <template slot="label"> 库存 </template>
+                  {{ good.inventory }}
+                </el-descriptions-item>
+                <el-descriptions-item>
                   <template slot="label"> 描述 </template>
                   {{ good.description }}
                 </el-descriptions-item>
@@ -57,11 +61,15 @@
               <el-input-number
                 v-model="good.num"
                 :min="0"
-                :max="99"
+                :max="good.inventory"
                 label="描述文字"
               ></el-input-number>
 
-              <el-button type="primary" @click="addShoppingCart(good)">
+              <el-button
+                type="primary"
+                @click="addShoppingCart(good)"
+                :disabled="good.inventory == 0 ? true : false"
+              >
                 添加购物车</el-button
               >
             </div>
@@ -77,6 +85,7 @@
       >
       </el-pagination>
     </div>
+    <h1 style="margin-left: 30px">好吃不贵,真的实惠!</h1>
   </div>
 </template>
 <script>
@@ -88,6 +97,7 @@ export default {
       total: -1,
       currentPage: 1,
       goodList: [],
+      button_disabled: false,
     };
   },
 
@@ -108,6 +118,16 @@ export default {
     },
     //添加至购物车
     addShoppingCart(good) {
+      // 通过goodId查找Vuex中的good对象
+      const cartGood = this.$store.state.cart.find(
+        (cartGood) => cartGood.goodId === good.id
+      );
+      // 如果找到了good对象并且它的num属性大于传入的good对象的inventory属性
+      if (cartGood && cartGood.num + good.num > good.inventory) {
+        // 展示消息
+        this.$message("库存不足");
+        return;
+      }
       this.$store.commit("addCart", {
         goodId: good.id,
         goodName: good.goodName,

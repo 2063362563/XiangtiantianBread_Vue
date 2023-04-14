@@ -124,13 +124,6 @@ export default {
           icon: "el-icon-user-solid",
           url: "My/My",
         },
-        {
-          path: "/setting",
-          name: "setting",
-          label: "设置",
-          icon: "el-icon-user-solid",
-          url: "Setting/Setting",
-        },
       ],
     };
   },

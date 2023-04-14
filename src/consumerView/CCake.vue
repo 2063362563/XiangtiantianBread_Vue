@@ -61,7 +61,11 @@
                 label="描述文字"
               ></el-input-number>
 
-              <el-button type="primary" @click="addShoppingCart(good)">
+              <el-button
+                type="primary"
+                @click="addShoppingCart(good)"
+                :disabled="good.inventory == 0 ? true : false"
+              >
                 添加购物车</el-button
               >
             </div>
@@ -77,6 +81,7 @@
       >
       </el-pagination>
     </div>
+    <h1 style="margin-left: 30px">好吃不贵,真的实惠!</h1>
   </div>
 </template>
 <script>
@@ -108,7 +113,24 @@ export default {
     },
     //添加至购物车
     addShoppingCart(good) {
-      console.log(good.id, good.num);
+      // 通过goodId查找Vuex中的good对象
+      const cartGood = this.$store.state.cart.find(
+        (cartGood) => cartGood.goodId === good.id
+      );
+
+      // 如果找到了good对象并且它的num属性大于传入的good对象的inventory属性
+      if (cartGood && cartGood.num + good.num > good.inventory) {
+        // 展示消息
+        this.$message("库存不足");
+        return;
+      }
+      this.$store.commit("addCart", {
+        goodId: good.id,
+        goodName: good.goodName,
+        price: good.nowPrice,
+        num: good.num,
+      });
+      console.log(this.$store.state.cart);
     },
   },
   created: async function () {
